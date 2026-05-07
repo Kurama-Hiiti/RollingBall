@@ -104,3 +104,39 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+
+# --- ここから独自に追加した除外設定 ---
+/Assets/DownLoadAsset/
+/Assets/DownLoadAsset.meta
+
+/Assets/Editor/
+/Assets/Editor.meta
+
+/Assets/Sound/
+/Assets/Sound.meta
+
+/Assets/Unity UI Samples/
+/Assets/Unity UI Samples.meta
+
+/Rolling Ball/
+
+/UnityRoomBuild_RollingBall/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
