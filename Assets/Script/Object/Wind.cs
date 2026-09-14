@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Wind : MonoBehaviour
 {
+    //プレイヤーに風の力（外力）を加える処理
+
     //風の力
     [SerializeField]
     private float windForce;
@@ -16,6 +18,7 @@ public class Wind : MonoBehaviour
     {
         Rigidbody rb = other.GetComponent<Rigidbody>();
 
+        //プレイヤーがコライダーの空間内にいる時に力を加え続ける
         if (other.gameObject.CompareTag("Player"))
         {
             rb.AddForce(windForceDir.normalized * windForce, ForceMode.Acceleration);

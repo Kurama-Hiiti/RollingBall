@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
 
     //プレイヤーの操作クラス
-    PlayerController controller = new PlayerController();
+    private readonly PlayerController controller = new();
 
     private Rigidbody rb;
 
@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
     private float extraGravityForce;
 
     //ワープ可能判定
-    public bool isWarp { get; private set; }
+    public bool IsWarp { get; private set; }
 
 
     void Start()
@@ -37,40 +37,35 @@ public class Player : MonoBehaviour
 
         cam = Camera.main;
 
-        isWarp = true;
+        IsWarp = true;
 
     }
 
     private void FixedUpdate()
     {
-        //仮想重力
-        rb.AddForce(Vector3.down * extraGravityForce, ForceMode.Acceleration);
-
-        //地面に接地している場合且つゴールしていない時移動可能
-        if (isGround)
+        if (GameManager.Instance.state == GameManager.GameState.Playing)
         {
-            //プレイヤーの移動関数
-            controller.PlayerMove(rb, cam, moveForce);
+            //仮想重力
+            rb.AddForce(Vector3.down * extraGravityForce, ForceMode.Acceleration);
+
+            //地面に接地している場合且つゴールしていない時移動可能
+            if (isGround)
+            {
+                //プレイヤーの移動関数
+                controller.PlayerMove(rb, cam, moveForce);
+
+            }
+            else
+            {
+                //プレイヤーの移動関数 空中では少しだけ動ける
+                controller.PlayerMove(rb, cam, moveForce / 10);
+            }
 
         }
-        else
-        {
-            //プレイヤーの移動関数 空中では少しだけ動ける
-            controller.PlayerMove(rb, cam, moveForce / 10);
-        }
-
 
     }
 
-
-    void Update()
-    {
-
-
-    }
-
-
-    //接地判定
+    //接地判定(true)
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
@@ -80,7 +75,7 @@ public class Player : MonoBehaviour
 
     }
 
-    //風の中でも移動しやすくする
+    //風の中でも移動しやすくする（風にも地面判定を付けている）
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Ground"))
@@ -89,6 +84,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //接地判定(false)
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
@@ -97,6 +93,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //接地判定(false)
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Ground"))
@@ -110,7 +107,7 @@ public class Player : MonoBehaviour
     public void Warp(Transform warpPos)
     {
         transform.position = warpPos.position;
-        isWarp = false;
+        IsWarp = false;
 
         SoundManager.instance.PlaySE(SoundManager.SoundType.Warp);
 
@@ -119,7 +116,7 @@ public class Player : MonoBehaviour
     //ワープフラグ変更関数
     public void WarpFlagChange()
     {
-        isWarp = true;
+        IsWarp = true;
     }
 
 }

@@ -7,8 +7,10 @@ using static SoundManager;
 
 public class SceneController : MonoBehaviour
 {
+    //シーンの遷移処理
+
     //シングルトン化
-    public static SceneController instance { get; private set; }
+    public static SceneController Instance { get; private set; }
 
     [Header("フェード設定")]
     [SerializeField] private Image fadeImage;
@@ -17,7 +19,7 @@ public class SceneController : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null) instance = this;
+        if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
 
@@ -56,7 +58,7 @@ public class SceneController : MonoBehaviour
     }
 
 
-    // フェードアウトしてからシーンを読み込む
+    // フェードアウトしてからシーンを読み込む(シーン名でシーン遷移)
     private IEnumerator FadeAndLoadScene(string sceneName)
     {
 
@@ -66,7 +68,7 @@ public class SceneController : MonoBehaviour
     }
 
 
-
+    // フェードアウトしてからシーンを読み込む(シーン番号でシーン遷移)
     private IEnumerator FadeAndLoadScene(int sceneIndex)
     {
         yield return StartCoroutine(Fade(1)); // フェードアウト
@@ -74,11 +76,16 @@ public class SceneController : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
 
+    //画面のフェードアウト処理
     private IEnumerator Fade(float targetAlpha)
     {
+        //フェードアウト用画像の初期アルファ値
         float startAlpha = fadeImage.color.a;
+
+        //経過時間
         float time = 0f;
 
+        //時間経過で徐々に目的のアルファ値へ遷移する
         while (time < fadeDuration)
         {
             time += Time.unscaledDeltaTime;
@@ -87,6 +94,7 @@ public class SceneController : MonoBehaviour
             yield return null;
         }
 
+        //最終的なアルファ値
         fadeImage.color = new Color(0, 0, 0, targetAlpha);
     }
 

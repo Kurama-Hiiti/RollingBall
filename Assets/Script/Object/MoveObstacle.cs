@@ -5,6 +5,8 @@ using static UnityEngine.GraphicsBuffer;
 
 public class MoveObstacle : MonoBehaviour
 {
+    //移動する障害物、移動床の処理
+
     private Vector3 originePos;
 
     [Header("移動距離指定")]
@@ -40,7 +42,7 @@ public class MoveObstacle : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true; // 自動制御用
+        rb.isKinematic = true;
     }
 
 
@@ -49,6 +51,7 @@ public class MoveObstacle : MonoBehaviour
     {
         originePos = transform.position;
 
+        //移動位置計算
         TargetPositionCalculation();
 
         isMovingToPlus = true;
@@ -56,12 +59,18 @@ public class MoveObstacle : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (isMove && GameManager.instance.state == GameManager.GameState.Playing) 
+        if (isMove && GameManager.Instance.state == GameManager.GameState.Playing) 
         {
+            //移動量
             float step = speed * Time.fixedDeltaTime;
+
+            //目的位置の設定
             Vector3 target = isMovingToPlus ? plusTargetPos : minusTargetPos;
+
+            //移動処理
             rb.MovePosition(Vector3.MoveTowards(transform.position, target, step));
 
+            //目的位置へ到着したとき
             if (transform.position == target)
             {
                 //移動床の場合は方向転換部分で一時停止する
@@ -70,7 +79,7 @@ public class MoveObstacle : MonoBehaviour
                     isMove = false;
                     StartCoroutine(ReverseWaitTime(1.0f));
                 }
-                else
+                else//障害物の場合は即座に反転
                 {
                     isMovingToPlus = !isMovingToPlus;
                 }
@@ -80,34 +89,7 @@ public class MoveObstacle : MonoBehaviour
 
     }
 
-
-    //void Update()
-    //{
-    //    float step = speed * Time.deltaTime;
-    //    if (isMovingToPlus)
-    //    {
-    //        transform.position = Vector3.MoveTowards(transform.position, plusTargetPos, step);
-
-    //        if (transform.position == plusTargetPos)
-    //        {
-    //            isMovingToPlus = false;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        transform.position = Vector3.MoveTowards(transform.position, minusTargetPos, step);
-
-    //        if (transform.position == minusTargetPos)
-    //        {
-    //            isMovingToPlus = true;
-    //        }
-    //    }
-        
-    //}
-
-
-
-    //移動関数
+    //移動位置計算関数
     private void TargetPositionCalculation()
     {
         plusTargetPos = originePos + new Vector3(edgePosX, edgePosY, edgePosZ);

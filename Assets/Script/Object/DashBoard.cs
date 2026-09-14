@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DashBoard : MonoBehaviour
 {
+    //踏むと指定された方向へ加速する板の処理
+
     //力を加える方向
     [SerializeField]
     private Vector3 forceDir;
@@ -26,6 +28,7 @@ public class DashBoard : MonoBehaviour
 
         if (other.gameObject.CompareTag("Player"))
         {
+            //既存の速度を消しダッシュボードの方向へ確実に進む(直角に曲がれるようにするため)
             if (isStop)
             {
                 rb.velocity = Vector3.zero; // 一度速度をリセット
@@ -36,7 +39,7 @@ public class DashBoard : MonoBehaviour
                     SoundManager.instance.PlaySE(SoundManager.SoundType.Dash);
                 }
             }
-            else
+            else//既存の速度を保持し純粋な加速を行う
             {
                 rb.AddForce(forceDir.normalized * addForcePower, ForceMode.Impulse);
                 if (isSound)

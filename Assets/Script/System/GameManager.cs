@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     //シングルトン化
-    public static GameManager instance { get; private set; }
+    public static GameManager Instance { get; private set; }
 
     //ゲームの状態を格納
     public enum GameState
@@ -35,11 +35,11 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
-        else if (instance != this)
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
@@ -47,13 +47,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        //ゲーム開始時状態設定
         if (SceneManager.GetActiveScene().name == "TitleScene")
         {
             state = GameState.Title;
         }
         else
         {
-            //ゲーム開始時状態設定
             state = GameState.Playing;
             isMenu = false;
         }
@@ -123,10 +123,8 @@ public class GameManager : MonoBehaviour
         if (state == GameState.GameClear) return; // 多重防止
         state = GameState.GameClear;
 
-        // 必要な処理まとめて管理
-
         //プレイヤーのRigidbodyのモード変更(移動しないようにするため)
-        Invoke("RigidbodyModeToggle", 0.3f);
+        StartCoroutine(RigidbodyModeToggle(0.3f));
 
         //ゲームクリアパネル表示
         uiManager.ShowGameClearPanel();
@@ -135,7 +133,7 @@ public class GameManager : MonoBehaviour
         MouseCursorToggle();
 
         //ステージクリア数更新
-        StageManager.instance.StageClearNumUpdate();
+        StageManager.Instance.StageClearNumUpdate();
 
     }
 
@@ -146,7 +144,7 @@ public class GameManager : MonoBehaviour
         state = GameState.GameOver;
 
         //プレイヤーのRigidbodyのモード変更(移動しないようにするため)
-        Invoke("RigidbodyModeToggle", 0.3f);
+        StartCoroutine(RigidbodyModeToggle(0.3f));
 
         //ゲームオーバーパネル表示
         uiManager.ShowGameOverPanel();
@@ -180,6 +178,32 @@ public class GameManager : MonoBehaviour
             rb.angularVelocity = savedAngularVelocity;
         }
 
+    }
+
+    //速度を保存してプレイヤーのRigidbodyのモード変更関数(コルーチン)
+    private IEnumerator RigidbodyModeToggle(float time)
+    {
+        //指定時間待つ
+        yield return new WaitForSeconds(time);
+
+        GameObject player = GameObject.FindWithTag("Player");
+
+        Rigidbody rb = player.GetComponent<Rigidbody>();
+
+
+        //ポーズされた瞬間
+        if (!rb.isKinematic)
+        {
+            savedVelocity = rb.velocity;
+            savedAngularVelocity = rb.angularVelocity;
+            rb.isKinematic = true;
+        }
+        else if (rb.isKinematic) //ポーズ解除
+        {
+            rb.isKinematic = false;
+            rb.velocity = savedVelocity;
+            rb.angularVelocity = savedAngularVelocity;
+        }
     }
 }
 

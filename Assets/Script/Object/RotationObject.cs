@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class RotationObject : MonoBehaviour
 {
+    //‰ñ“]‚·‚é•¨‘Ì‚Ìˆ—
+
     [Header("‰ñ“]²iX, Y, Z ‚Å’²®j")]
     [SerializeField]
     private Vector3 rotationAxis;
@@ -20,8 +22,6 @@ public class RotationObject : MonoBehaviour
     [SerializeField]
     private bool isRotation = true;
 
-    //‰Šú’l
-    //private Quaternion initialRotation;
 
     void Start()
     {
@@ -29,14 +29,15 @@ public class RotationObject : MonoBehaviour
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.isKinematic = true;
 
-        //initialRotation = transform.rotation;
     }
 
     void FixedUpdate()
     {
-        if (GameManager.instance.state == GameManager.GameState.Playing && isRotation)
+        if (GameManager.Instance.state == GameManager.GameState.Playing && isRotation)
         {
-            Quaternion deltaRotation = Quaternion.Euler(rotationAxis.normalized * rotationSpeed * Time.fixedDeltaTime);
+            //‰ñ“]—Ê
+            Quaternion deltaRotation = Quaternion.Euler(rotationSpeed * Time.fixedDeltaTime * rotationAxis.normalized);
+            //‰ñ“]ˆ—
             rb.MoveRotation(rb.rotation * deltaRotation);
         }
 
@@ -44,6 +45,7 @@ public class RotationObject : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        //ƒvƒŒƒCƒ„[‚ªG‚ê‚½Û‚É‰ñ“]ŠJn‚·‚é
         if (collision.gameObject.CompareTag("Player"))
         {
             if (!isRotation)

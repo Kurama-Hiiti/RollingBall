@@ -34,7 +34,6 @@ public class CameraMnager : MonoBehaviour
     private float x;
     private float y;
 
-    // Start is called before the first frame update
     void Start()
     {
         //基準となる軸を設定
@@ -44,10 +43,10 @@ public class CameraMnager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        if (target != null && GameManager.instance.state == GameState.Playing)
+        if (target != null && GameManager.Instance.state == GameState.Playing)
         {
             //マウスカーソルの位置を判定して角度を替える
             x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
@@ -61,11 +60,11 @@ public class CameraMnager : MonoBehaviour
             Vector3 position = rotation * new Vector3(0.0f, 0.0f, -distance) + target.position;
 
             //変更した値を反映する
-            transform.rotation = rotation;
-            transform.position = position;
+            transform.SetPositionAndRotation(position, rotation);
         }
     }
 
+    //角度制限関数
     static float ClampAngle(float angle, float min, float max)
     {
         if (angle < -360)

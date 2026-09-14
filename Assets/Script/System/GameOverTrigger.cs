@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class GameOverTrigger : MonoBehaviour
 {
+    //ゲームオーバー処理の呼び出しスクリプト
+
+    //プレイヤーがゲームオーバーゾーンへ触れた時に処理を呼び出す
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            GameManager.instance.GameOver();
+            GameManager.Instance.GameOver();
         }
     }
 
@@ -17,7 +21,7 @@ public class GameOverTrigger : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            GameManager.instance.GameOver();
+            GameManager.Instance.GameOver();
         }
     }
 }

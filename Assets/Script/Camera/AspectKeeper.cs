@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AspectKeeper : MonoBehaviour
 {
+    //画面サイズを変えても画面のアスペクト比を一定にする処理
 
     [SerializeField]
     private Camera targetCamera; //対象とするカメラ
@@ -29,7 +30,7 @@ public class AspectKeeper : MonoBehaviour
         else
         {
             viewportRect.height = 1 / magRate; //使用する縦幅を変更
-            viewportRect.y = 0.5f - viewportRect.height * 0.5f;//中央余生
+            viewportRect.y = 0.5f - viewportRect.height * 0.5f;//中央寄せ
         }
 
         targetCamera.rect = viewportRect; //カメラのViewportに適用

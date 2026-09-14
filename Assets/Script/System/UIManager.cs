@@ -71,13 +71,14 @@ public class UIManager : MonoBehaviour
 
         menuPanel.SetActive(isVisible);
 
+        //メニュー表示時ステート変更
         if (isVisible)
         {
-            GameManager.instance.state = GameManager.GameState.GamePaused;
+            GameManager.Instance.state = GameManager.GameState.GamePaused;
         }
         else
         {
-            GameManager.instance.state = GameManager.GameState.Playing;
+            GameManager.Instance.state = GameManager.GameState.Playing;
         }
     }
 

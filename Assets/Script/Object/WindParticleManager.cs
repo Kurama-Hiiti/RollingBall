@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class WindParticleManager : MonoBehaviour
 {
+    //風のエフェクト表示処理
+
+
     private ParticleSystem particle;
 
     private void Start()
@@ -14,7 +17,7 @@ public class WindParticleManager : MonoBehaviour
     void Update()
     {
         //ゲームプレイ中のみエフェクト再生
-        if (GameManager.instance.state != GameManager.GameState.Playing)
+        if (GameManager.Instance.state != GameManager.GameState.Playing)
         {
             particle.Pause();           
         }

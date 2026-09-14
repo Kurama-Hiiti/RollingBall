@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class WarpGate : MonoBehaviour
 {
+    //瞬間移動処理
+
+    //移動先
     [SerializeField]
     private Transform warpPos;
 
+    //プレイヤーに設定されているワープ可能かのフラグをコピーするためのブール値
     private bool copyIsWarp;
 
     private void OnTriggerEnter(Collider other)
@@ -14,12 +18,15 @@ public class WarpGate : MonoBehaviour
 
         if (other.gameObject.CompareTag("Player"))
         {
+            //プレイヤーのスクリプト取得
             Player player = other.gameObject.GetComponent<Player>();
 
-            copyIsWarp = player.isWarp;
+            //プレイヤーのワープ可能フラグをコピー
+            copyIsWarp = player.IsWarp;
 
-            if (player != null && player.isWarp && warpPos != null) 
+            if (player != null && player.IsWarp && warpPos != null) 
             {
+                //ワープ処理
                 player.Warp(warpPos);
             }
            
@@ -28,6 +35,7 @@ public class WarpGate : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        //プレイヤーが離れる際の処理
         if (other.gameObject.CompareTag("Player") && !copyIsWarp)
         {
             Player player = other.gameObject.GetComponent<Player>();

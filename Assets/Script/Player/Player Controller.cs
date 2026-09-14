@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController
 {
+    //ƒvƒŒƒCƒ„[‚ÌˆÚ“®ˆ—
+
     public void PlayerMove(Rigidbody rb, Camera cam, float moveForce)
     {
         float x = Input.GetAxis("Horizontal"); // A/D ‚Ü‚½‚Í ©/¨
